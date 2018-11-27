@@ -8,7 +8,8 @@ import (
 var tpl *template.Template
 
 func init() {
-	tpl = template.Must(template.ParseGlob("templates/*"))
+
+	tpl = template.Must(template.ParseGlob("htmltemplates/*"))
 }
 
 func Index(w http.ResponseWriter, res *http.Request) {

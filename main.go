@@ -13,7 +13,9 @@ import (
 )
 
 // These two lines are important in order to allow access from the front-end side to the methods
-var allowedOrigins = handlers.AllowedOrigins([]string{"*"})
+//var allowedOrigins = handlers.AllowedOrigins([]string{"*"})
+
+var allowedOrigins = handlers.AllowedOrigins([]string{"res.bhn.net"})
 var allowedMethods = handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "PUT"})
 
 /*
@@ -51,8 +53,10 @@ func main() {
 
 	router := routes.GetRoutes()
 
+	//http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
+	router.Handle("/assets/", http.StripPrefix("/assets", http.FileServer(http.Dir("./assets"))))
 	// launch server with CORS validations
-	http.ListenAndServe(":9090", handlers.CORS(
+	http.ListenAndServe("173.168.101.178:9090", handlers.CORS(
 		allowedOrigins, allowedMethods)(router))
 
 }

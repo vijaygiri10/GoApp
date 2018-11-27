@@ -3,8 +3,9 @@ package routes
 import (
 	controller "GoAPP/controller"
 	logger "GoAPP/logger"
+	"GoAPP/template"
 
-	"GoAPP/templates"
+	//"fmt"
 	"net/http"
 
 	mux "GoAPP/github.com/gorilla/mux"
@@ -43,7 +44,7 @@ var Routes = []route{
 	route{
 		//Display Signup Page
 		FuncName:    "Signup",
-		MethodType:  "GET",
+		MethodType:  "POST",
 		URLPattern:  "/signup",
 		HandlerFunc: template.Signup,
 	},
@@ -61,14 +62,7 @@ var Routes = []route{
 		URLPattern:  "/process",
 		HandlerFunc: template.Process,
 	},
-	/*route{
-		//Display Contact Page
-		FuncName:    "Assets",
-		MethodType:  "GET",
-		URLPattern:  "/assets/",
-		HandlerFunc: http.StripPrefix("/assets", http.FileServer(http.Dir("./assets"))),
-	},
-	*/
+
 	route{
 		//View list of orders and their current status
 		FuncName:    "GetOrderswithStatus",
@@ -101,6 +95,5 @@ func GetRoutes() *mux.Router {
 
 		MuxRouter.Methods(route.MethodType).Path(route.URLPattern).Name(route.FuncName).Handler(logger.Logger(handler, route.FuncName))
 	}
-	MuxRouter.Handle("/assets/", http.StripPrefix("/assets", http.FileServer(http.Dir("/Users/maropost/Desktop/maropost/src/GoApp/assets"))))
 	return MuxRouter
 }

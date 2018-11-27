@@ -5,42 +5,33 @@ import (
 	"errors"
 	"sync"
 
-	_ "github.com/mutecomm/go-sqlcipher"
+	_ "github.com/go-sql-driver/mysql"
 )
 
-type Sqlitedb struct {
+type Mysql struct {
 	DB        *sql.DB
 	dbRWMutex sync.RWMutex
 }
 
-func GetDBConnection(DBName, Schema string) (*Sqlitedb, error) {
+func GetDBConnection(DBName, DNS string) (*sql.DB, error) {
 
-	var Error error
-	dbConn.DB, Error = sql.Open("mysql", DBName)
+	/*
+		user@unix(/path/to/socket)/dbname?charset=utf8
+		user:password@tcp(localhost:5555)/dbname?charset=utf8
+		user:password@/dbname
+		user:password@tcp([de:ad:be:ef::ca:fe]:80)/dbname
+		username:password@tcp(127.0.0.1:3306)/test
+	*/
 
-	if Error != nil {
-		return nil, Error
-	}
-	_, err := dbConn.DB.Exec(Schema)
-
-	if err != nil {
-		err_close := dbConn.Close()
-		if err_close != nil {
-			return dbConn, errors.New(err.Error() + err_close.Error())
-		} else {
-			return dbConn, err
-		}
-	}
-
-	return dbConn, nil
+	return sql.Open("mysql", "user:password@/dbname")
 }
 
-func (DBObject *Sqlitedb) Close() error {
+func (DBObject *Mysql) Close() error {
 	err := DBObject.DB.Close()
 	return err
 }
 
-func (DBObject *Sqlitedb) ExecuteQuery(strQuery string) error {
+func (DBObject *Mysql) ExecuteQuery(strQuery string) error {
 	DBObject.dbRWMutex.Lock()
 	defer DBObject.dbRWMutex.Unlock()
 
@@ -49,7 +40,7 @@ func (DBObject *Sqlitedb) ExecuteQuery(strQuery string) error {
 	return err
 }
 
-func (DBObject *Sqlitedb) SelectQuery(strQuery string) (*sql.Rows, error) {
+func (DBObject *Mysql) SelectQuery(strQuery string) (*sql.Rows, error) {
 	DBObject.dbRWMutex.Lock()
 	defer DBObject.dbRWMutex.Unlock()
 
@@ -58,7 +49,7 @@ func (DBObject *Sqlitedb) SelectQuery(strQuery string) (*sql.Rows, error) {
 	return rows, err
 }
 
-func (DBObject *Sqlitedb) UpdateQuery(strQuery, data string) error {
+func (DBObject *Mysql) UpdateQuery(strQuery, data string) error {
 	DBObject.dbRWMutex.Lock()
 	defer DBObject.dbRWMutex.Unlock()
 
