@@ -66,54 +66,25 @@ func ValidateJWT(res *http.Request) (bool, error) {
 	}
 }
 
-//
-func ReadCookie(cookie_key string, req *http.Request) {
+//GetAllCookies
+func GetAllCookies(req *http.Request) (cookieMap map[string]string) {
 
-// readCookies parses all "Cookie" values from resquest
-	res.Cookies()
-	
-	lines, ok := h["Cookie"]
-	if !ok {
-		return []*Cookie{}
+	cookieMap = map[string]string{}
+
+	for _, cookie := range req.Cookies() {
+		cookieMap[cookie.Name] = cookie.Value
 	}
 
-	cookies := []*Cookie{}
-	for _, line := range lines {
-		parts := strings.Split(strings.TrimSpace(line), ";")
-		if len(parts) == 1 && parts[0] == "" {
-			continue
-		}
-		// Per-line attributes
-		for i := 0; i < len(parts); i++ {
-			parts[i] = strings.TrimSpace(parts[i])
-			if len(parts[i]) == 0 {
-				continue
-			}
-			name, val := parts[i], ""
-			if j := strings.Index(name, "="); j >= 0 {
-				name, val = name[:j], name[j+1:]
-			}
-			if !isCookieNameValid(name) {
-				continue
-			}
-			if filter != "" && filter != name {
-				continue
-			}
-			val, ok := parseCookieValue(val, true)
-			if !ok {
-				continue
-			}
-			cookies = append(cookies, &Cookie{Name: name, Value: val})
-		}
-	}
-	return cookies
+	return cookieMap
 }
-///
-	c, err := req.Cookie(cookie_key)
+
+//GetCookieByName
+func GetCookieByName(By_Name string, req *http.Request) string {
+
+	cookieObject, err := req.Cookie(By_Name)
 	if err != nil {
-		http.Error(w, http.StatusText(400), http.StatusBadRequest)
-		return
+		return ""
 	}
 
-	fmt.Fprintln(w, "YOUR COOKIE:", c.Value)
+	return cookieObject.Value
 }
