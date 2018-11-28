@@ -1,6 +1,7 @@
 package template
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 )
@@ -18,7 +19,7 @@ func Index(w http.ResponseWriter, res *http.Request) {
 		Title string
 	}{Title: "Index Page"}
 
-	tpl.ExecuteTemplate(w, "index.gohtml", gd)
+	tpl.ExecuteTemplate(w, "loginsigup.gohtml", gd)
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
@@ -38,10 +39,11 @@ func Contact(w http.ResponseWriter, r *http.Request) {
 }
 
 func Signup(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("INside Signup")
 	gd := struct {
 		Title string
 	}{Title: "Signup"}
-
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	tpl.ExecuteTemplate(w, "signup.gohtml", gd)
 }
 

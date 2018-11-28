@@ -16,7 +16,7 @@ import (
 //var allowedOrigins = handlers.AllowedOrigins([]string{"*"})
 
 var allowedOrigins = handlers.AllowedOrigins([]string{"*"})
-var allowedMethods = handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "PUT"})
+var allowedMethods = handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "PUT", "OPTIONS", "HEAD"})
 var allowedHeaders = handlers.AllowedHeaders([]string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "X-XSRF-Token", "X-HTTP-Method-Override", "X-Requested-With", "Mobile-Cookie"})
 
 /*
@@ -39,7 +39,6 @@ See ##3914887 for Iteration 2 features
 * Able to cancel a subscription (a recurring order)
 */
 func main() {
-	//var cancelfunc context.CancelFunc
 
 	gracefulStop := make(chan os.Signal)
 	signal.Notify(gracefulStop, syscall.SIGTERM)
@@ -54,26 +53,13 @@ func main() {
 
 	router := routes.GetRoutes()
 
-	//http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
-	//router.Handle("/assets/", http.FileServer(http.Dir("./assets")))
-	//router.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("."))))
-
-	//router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("."))))
-
-	// launch server with CORS validations
-	//http.ListenAndServe("localhost:9080", handlers.CORS(
-	//	allowedOrigins, allowedMethods)(router))
-
-	// This will serve files under http://localhost:8000/static/<filename>
+	// This will serve files under http://IP:PORT/assets/<filename>
 	router.PathPrefix("/assets/").Handler(http.FileServer(http.Dir(".")))
 
 	Server := &http.Server{
-		Handler: router,
-		Addr:    "127.0.0.1:3000",
-		// Good practice: enforce timeouts for servers you create!
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
+		Handler: handlers.CORS(allowedOrigins, allowedMethods)(router),
+		Addr:    "127.0.0.1:9080",
 	}
 
-	Server.ListenAndServe()
+	fmt.Println(Server.ListenAndServe())
 }

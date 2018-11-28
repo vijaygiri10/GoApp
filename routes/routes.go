@@ -49,16 +49,16 @@ var Routes = []route{
 		HandlerFunc: template.Signup,
 	},
 	route{
-		//Display Process Page
-		FuncName:    "Process",
+		//Display Signup Page
+		FuncName:    "Signup",
 		MethodType:  "GET",
-		URLPattern:  "/process",
-		HandlerFunc: template.Process,
+		URLPattern:  "/signup",
+		HandlerFunc: template.Signup,
 	},
 	route{
 		//Display Process Page
 		FuncName:    "Process",
-		MethodType:  "PUT",
+		MethodType:  "POST",
 		URLPattern:  "/process",
 		HandlerFunc: template.Process,
 	},
