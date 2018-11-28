@@ -58,7 +58,7 @@ var Routes = []route{
 	route{
 		//Display Process Page
 		FuncName:    "Process",
-		MethodType:  "POST",
+		MethodType:  "PUT",
 		URLPattern:  "/process",
 		HandlerFunc: template.Process,
 	},
@@ -88,7 +88,7 @@ var Routes = []route{
 
 //GetRoutes configures a new router to the API
 func GetRoutes() *mux.Router {
-	MuxRouter := mux.NewRouter()
+	MuxRouter := mux.NewRouter().StrictSlash(true)
 	for _, route := range Routes {
 		var handler http.Handler
 		handler = route.HandlerFunc

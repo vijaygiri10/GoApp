@@ -15,8 +15,9 @@ import (
 // These two lines are important in order to allow access from the front-end side to the methods
 //var allowedOrigins = handlers.AllowedOrigins([]string{"*"})
 
-var allowedOrigins = handlers.AllowedOrigins([]string{"res.bhn.net"})
+var allowedOrigins = handlers.AllowedOrigins([]string{"*"})
 var allowedMethods = handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "PUT"})
+var allowedHeaders = handlers.AllowedHeaders([]string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "X-XSRF-Token", "X-HTTP-Method-Override", "X-Requested-With", "Mobile-Cookie"})
 
 /*
 The End Customer portal is requirement for all merchants who offer subscription-based products.
@@ -45,8 +46,8 @@ func main() {
 	signal.Notify(gracefulStop, syscall.SIGINT)
 	go func() {
 		sig := <-gracefulStop
-		fmt.Printf("caught sig: %+v\t\n", sig)
-		fmt.Println("Stopping Http Server")
+		fmt.Printf("\n\tcaught sig: %+v\t\n", sig)
+		fmt.Println("\tStopping Http Server")
 		time.Sleep(10 * time.Nanosecond)
 		os.Exit(0)
 	}()
@@ -54,9 +55,25 @@ func main() {
 	router := routes.GetRoutes()
 
 	//http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
-	router.Handle("/assets/", http.StripPrefix("/assets", http.FileServer(http.Dir("./assets"))))
-	// launch server with CORS validations
-	http.ListenAndServe("173.168.101.178:9090", handlers.CORS(
-		allowedOrigins, allowedMethods)(router))
+	//router.Handle("/assets/", http.FileServer(http.Dir("./assets")))
+	//router.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("."))))
 
+	//router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("."))))
+
+	// launch server with CORS validations
+	//http.ListenAndServe("localhost:9080", handlers.CORS(
+	//	allowedOrigins, allowedMethods)(router))
+
+	// This will serve files under http://localhost:8000/static/<filename>
+	router.PathPrefix("/assets/").Handler(http.FileServer(http.Dir(".")))
+
+	Server := &http.Server{
+		Handler: router,
+		Addr:    "127.0.0.1:3000",
+		// Good practice: enforce timeouts for servers you create!
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+
+	Server.ListenAndServe()
 }

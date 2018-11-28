@@ -3,25 +3,21 @@ package util
 import (
 	"errors"
 	"net/http"
+	"strings"
+	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-var JwtSigningKey string = "maropost_jwt_screct"
+var JwtSigningScrect string = "maropost_jwt_screct"
 
 //GenrateJWT check jwt valid or not
-func GenrateJWT() {
+func GenrateJWT() (string, error) {
+	//Create a new token object, specifying signing method
+	token := jwt.New(jwt.SigningMethodHS256)
 
-	// Create a new token object, specifying signing method and the claims
-	// you would like it to contain.
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"foo": "bar",
-		"nbf": time.Date(2015, 10, 10, 12, 0, 0, 0, time.UTC).Unix(),
-	})
-
-	// Sign and get the complete encoded token as a string using the secret
-	tokenString, err := token.SignedString(hmacSampleSecret)
-
+	//Sign and get the complete encoded token as a string using the secret
+	return token.SignedString(JwtSigningScrect)
 }
 
 //ValidateJWT check jwt valid or not
@@ -30,9 +26,9 @@ func ValidateJWT(res *http.Request) (bool, error) {
 	//Grab the token from the header
 	tokenHeader := res.Header.Get("Authorization")
 
-	//Token is missing, returns with error code 403 Unauthorized
+	//Check Token is missing or not
 	if tokenHeader == "" {
-		return false, errors.New("missing auth token")
+		return false, errors.New("Missing auth token")
 	}
 
 	//The token normally comes in format `Bearer {token-body}`,
@@ -50,9 +46,8 @@ func ValidateJWT(res *http.Request) (bool, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-
 		// your secret maropost_jwt_screct
-		return []byte("maropost_jwt_screct"), nil
+		return []byte(JwtSigningScrect), nil
 	})
 
 	//Malformed token, returns with http code 403 as usual
@@ -64,9 +59,10 @@ func ValidateJWT(res *http.Request) (bool, error) {
 	if !token.Valid {
 		return false, errors.New("Token is not valid.")
 	}
+	return true, nil
 }
 
-//GetAllCookies
+//GetAllCookies from http request
 func GetAllCookies(req *http.Request) (cookieMap map[string]string) {
 
 	cookieMap = map[string]string{}
@@ -78,13 +74,13 @@ func GetAllCookies(req *http.Request) (cookieMap map[string]string) {
 	return cookieMap
 }
 
-//GetCookieByName
-func GetCookieByName(By_Name string, req *http.Request) string {
+//GetCookieByName from http request
+func GetCookieByName(By_Name string, req *http.Request) (string, error) {
 
 	cookieObject, err := req.Cookie(By_Name)
 	if err != nil {
-		return ""
+		return "", err
 	}
 
-	return cookieObject.Value
+	return cookieObject.Value, nil
 }

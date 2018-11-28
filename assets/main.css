@@ -7,7 +7,7 @@ html, body, main, header, div, a {
 
 main {
     height: 100vh;
-    background-image: url("/assets/paradise.jpeg");
+    background-image: url("paradise.jpeg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;

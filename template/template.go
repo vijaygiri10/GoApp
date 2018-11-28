@@ -9,7 +9,7 @@ var tpl *template.Template
 
 func init() {
 
-	tpl = template.Must(template.ParseGlob("htmltemplates/*"))
+	tpl = template.Must(template.ParseGlob("htmltemplates/*.gohtml"))
 }
 
 func Index(w http.ResponseWriter, res *http.Request) {
