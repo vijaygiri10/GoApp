@@ -8,7 +8,7 @@ import (
 	//"fmt"
 	"net/http"
 
-	mux "GoAPP/github.com/gorilla/mux"
+	mux "github.com/gorilla/mux"
 )
 
 type route struct {
