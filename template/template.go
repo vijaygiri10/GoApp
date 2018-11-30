@@ -19,7 +19,7 @@ func Index(w http.ResponseWriter, res *http.Request) {
 		Title string
 	}{Title: "Index Page"}
 
-	tpl.ExecuteTemplate(w, "loginsigup.gohtml", gd)
+	tpl.ExecuteTemplate(w, "index.gohtml", gd)
 }
 
 func About(w http.ResponseWriter, r *http.Request) {

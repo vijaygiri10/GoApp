@@ -58,7 +58,7 @@ func main() {
 
 	Server := &http.Server{
 		Handler: handlers.CORS(allowedOrigins, allowedMethods)(router),
-		Addr:    "127.0.0.1:9080",
+		Addr:    "127.0.0.1:8080",
 	}
 
 	fmt.Println(Server.ListenAndServe())
