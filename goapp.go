@@ -1,8 +1,8 @@
 package main
 
 import (
+	"GoApp/routes"
 	"fmt"
-	"goapp/routes"
 	"net/http"
 	"os"
 	"os/signal"
