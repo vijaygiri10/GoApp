@@ -1,0 +1,33 @@
+{
+	"ImportPath": "GoApp",
+	"GoVersion": "go1.11",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "GoAPP/controller",
+			"Rev": "2999551000d2f976a77cab850e0f4d5f8f3b37cd"
+		},
+		{
+			"ImportPath": "GoAPP/logger",
+			"Rev": "2999551000d2f976a77cab850e0f4d5f8f3b37cd"
+		},
+		{
+			"ImportPath": "GoAPP/routes",
+			"Rev": "2999551000d2f976a77cab850e0f4d5f8f3b37cd"
+		},
+		{
+			"ImportPath": "GoAPP/template",
+			"Rev": "2999551000d2f976a77cab850e0f4d5f8f3b37cd"
+		},
+		{
+			"ImportPath": "github.com/gorilla/handlers",
+			"Comment": "v1.4.0-2-g350d97a",
+			"Rev": "350d97a79266938cd77a9192b7d995132d4e2b5b"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Comment": "v1.6.2-12-g3d80bc8",
+			"Rev": "3d80bc801bb034e17cae38591335b3b1110f1c47"
+		}
+	]
+}
