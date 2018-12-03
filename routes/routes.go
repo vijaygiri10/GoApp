@@ -1,9 +1,9 @@
 package routes
 
 import (
-	controller "GoAPP/controller"
-	logger "GoAPP/logger"
-	"GoAPP/template"
+	controller "goapp/controller"
+	logger "goapp/logger"
+	"goapp/template"
 
 	//"fmt"
 	"net/http"

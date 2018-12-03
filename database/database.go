@@ -13,6 +13,18 @@ type Mysql struct {
 	dbRWMutex sync.RWMutex
 }
 
+func CreateDB() {
+	schema := `
+			CREATE TABLE maropost (
+				username TEXT PRIMARY KEY,
+				password TEXT NOT NULL,
+				street2 TEXT,
+				street3 TEXT,
+				city TEXT NOT NULL,
+				postal us_postal_code NOT NULL);	
+			`
+
+}
 func GetDBConnection(DBName, DNS string) (*sql.DB, error) {
 
 	/*
@@ -23,7 +35,7 @@ func GetDBConnection(DBName, DNS string) (*sql.DB, error) {
 		username:password@tcp(127.0.0.1:3306)/test
 	*/
 
-	return sql.Open("mysql", "user:password@/dbname")
+	return sql.Open("postgres", "postgres:Giri10390@@/dvdrental")
 }
 
 func (DBObject *Mysql) Close() error {

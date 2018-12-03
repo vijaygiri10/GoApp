@@ -13,6 +13,7 @@ var JwtSigningScrect string = "maropost_jwt_screct"
 
 //GenrateJWT check jwt valid or not
 func GenrateJWT() (string, error) {
+
 	//Create a new token object, specifying signing method
 	token := jwt.New(jwt.SigningMethodHS256)
 
